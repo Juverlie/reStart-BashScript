@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Function to create a directory and files
+create_directory_and_files() {
+    # Prompt for the directory name
+    read -p "Enter the directory name: " dir_name
+
+    # Create the directory
+    mkdir -p "$dir_name"
+
+    # Check if the directory was created successfully
+    if [ $? -ne 0 ]; then
+        echo "Failed to create directory '$dir_name'."
+        exit 1
+    fi
+
+    # Create .html file
+    touch "$dir_name/index.html"
+    if [ $? -ne 0 ]; then
+        echo "Failed to create index.html in '$dir_name'."
+        exit 1
+    fi
+
+    # Create .cs file
+    touch "$dir_name/program.cs"
+    if [ $? -ne 0 ]; then
+        echo "Failed to create program.cs in '$dir_name'."
+        exit 1
+    fi
+
+    # Create .js file
+    touch "$dir_name/script.js"
+    if [ $? -ne 0 ]; then
+        echo "Failed to create script.js in '$dir_name'."
+        exit 1
+    fi
+
+    echo "Directory '$dir_name' and files created successfully."
+}
+
+# Call the function
+create_directory_and_files
+
+create_files.sh
+
+chmod +x create_files.sh
+
+./create_files.sh
+
+
