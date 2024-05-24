@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Function to create a new user
+create_user() {
+    # Prompt for the username
+    read -p "Enter the username: " username
+
+    # Check if the user already exists
+    if id "$username" &>/dev/null; then
+        echo "User '$username' already exists!"
+        exit 1
+    fi
+
+    # Create the new user
+    sudo useradd "$username"
+
+    # Check if the user was created successfully
+    if [ $? -ne 0 ]; then
+        echo "Failed to create user '$username'."
+        exit 1
+    fi
+
+    # Prompt for the password
+    read -s -p "Enter the password for $username: " password
+    echo
+    read -s -p "Confirm the password: " password_confirm
+    echo
+
+    # Check if passwords match
+    if [ "$password" != "$password_confirm" ]; then
+        echo "Passwords do not match!"
+        sudo userdel "$username"
+        exit 1
+    fi
+
+    # Set the password for the new user
+    echo "$username:$password" | sudo chpasswd
+
+    # Check if the password was set successfully
+    if [ $? -ne 0 ]; then
+        echo "Failed to set password for '$username'."
+        sudo userdel "$username"
+        exit 1
+    fi
+
+    echo "User '$username' has been created successfully."
+}
+
+# Call the function
+create_user
+
+create_user.sh
+chmod +x create_user.sh
